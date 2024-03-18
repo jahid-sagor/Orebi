@@ -1,8 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from '../components/Container'
 import { Link } from 'react-router-dom'
+import { getDatabase, ref, onValue } from "firebase/database";
 
 const Cheakout = () => {
+   const db = getDatabase();
+   let [data, setData] = useState([])
+
+   useEffect(() => {
+      const starCountRef = ref(db, 'users/');
+      onValue(starCountRef, (snapshot) => {
+       snapshot.forEach((item)=>{
+         setData(item.val());
+       })
+      });
+   }, [])
   return (
     <section>
         <Container>
