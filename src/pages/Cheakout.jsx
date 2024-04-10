@@ -1,20 +1,34 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Container from '../components/Container'
 import { Link } from 'react-router-dom'
 import { getDatabase, ref, onValue } from "firebase/database";
 
+import { useSelector } from 'react-redux';
+
+
 const Cheakout = () => {
+   let data = useSelector((state)=> state.single.cartItem)
    const db = getDatabase();
-   let [data, setData] = useState([])
+   let [dataChea, setDataCheak] = useState([])
+  
 
    useEffect(() => {
       const starCountRef = ref(db, 'users/');
       onValue(starCountRef, (snapshot) => {
        snapshot.forEach((item)=>{
-         setData(item.val());
+         setDataCheak(item.val());
        })
       });
    }, [])
+
+   const {totalPrice, totalQuantity} = data.reduce((acc , item)=>{
+      acc.totalPrice += item.price * item.quantity 
+      acc.totalQuantity += item.quantity
+      return acc;
+     },{totalPrice:0, totalQuantity:0})
+    
+     console.log(totalPrice);
+     console.log(totalQuantity);
   return (
     <section>
         <Container>
@@ -90,15 +104,19 @@ const Cheakout = () => {
             <tbody>
               <tr>
                 <td className="font-dm font-bold text-[16px] text-[#262626] text-start px-4 py-4 border border-slate-200">Product name x 1</td>
-                <td className="font-dm font-normal text-[16px] text-[#767676] px-4 border border-slate-200 ">$ 389.99</td>
+                <td className="font-dm font-normal text-[16px] text-[#767676] px-4 border border-slate-200 ">$</td>
+              </tr>
+              <tr>
+                <td className="font-dm font-bold text-[16px] text-[#262626] text-start px-4 py-4 border border-slate-200 ">Total Quantity</td>
+                <td className="font-dm font-normal text-[16px] text-[#767676] px-4 border border-slate-200 ">{totalQuantity}</td>
               </tr>
               <tr>
                 <td className="font-dm font-bold text-[16px] text-[#262626] text-start px-4 py-4 border border-slate-200 ">Subtotal</td>
-                <td className="font-dm font-normal text-[16px] text-[#767676] px-4 border border-slate-200 ">$ 389.99</td>
+                <td className="font-dm font-normal text-[16px] text-[#767676] px-4 border border-slate-200 ">${totalPrice}</td>
               </tr>
               <tr>
                 <td className="font-dm font-bold text-[16px] text-[#262626] text-start px-4 py-4 border border-slate-200 ">Total</td>
-                <td className="font-dm font-normal text-[16px] text-[#767676] px-4 border border-slate-200 ">$ 389.99</td>
+                <td className="font-dm font-normal text-[16px] text-[#767676] px-4 border border-slate-200 ">${totalPrice}</td>
               </tr>
             </tbody>
         </table>               

@@ -1,20 +1,22 @@
-import React, { useEffect, useRef, useState,} from 'react'
+import React, { useContext, useEffect, useRef, useState,} from 'react'
 import Container from './Container'
-import Flex from './Flex'
 import { HiBars3BottomLeft } from "react-icons/hi2";
 import { FaUser,FaShoppingCart,FaSearch  } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { Link } from 'react-router-dom';
-import { UseSelector, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { Apidata } from './ContextAPi';
 
 const Navbar = () => {
+    let info = useContext(Apidata)
     let [cartshow, setCartshow] = useState(false)
     let categoryRef = useRef()
     let [usershow, setusershow] = useState(false)
     let userRef = useRef()
     let [shopshow, setshopshow] = useState(false)
     let shopRef = useRef()
+    let [searchFilter, setSearchFilter] = useState([])
     
     useEffect(()=> {
        document.addEventListener('click', (e)=>{
@@ -40,6 +42,14 @@ const Navbar = () => {
 
     let data = useSelector((state)=>state.single.cartItem)
 
+    let handleSearch = (e) => {
+        if(e.target.value == ''){
+            setSearchFilter([])
+        }else{
+            let searchOne = info.filter((item)  => item.title.toLowerCase().includes(e.target.value.toLowerCase()))
+            setSearchFilter(searchOne);
+        }
+    }
   return (
     <nav className='bg-[#F5F5F3] lg:py-4 py-2'>
         <Container>
@@ -63,9 +73,27 @@ const Navbar = () => {
 
 
                     <div className="w-[50%] relative" >
-                       <input type="search" className= 'w-full border-2  rounded-md outline-3 outline-cyan-200 py-2 lg:py-3 px-2 lg:text-[18px]  text-[16px]' placeholder='Search' /> <FaSearch className='absolute lg:top-5 top-3 lg:right-8 right-2 text-[#262626]'/>
-                    </div>
+                       <input onChange={handleSearch} type="search" className= 'w-full border-2  rounded-md outline-3 outline-cyan-200 py-2 lg:py-3 px-2 lg:text-[18px]  text-[16px]' placeholder='Search' /> <FaSearch className='absolute lg:top-5 top-3 lg:right-8 right-2 text-[#262626]'/>
 
+                      {searchFilter.length > 0 &&
+                          <div className=' lg:w-[60%] w-[250px] h-[540px] overflow-y-scroll bg-[#ffff] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] rounded-b-md absolute z-50 top-[52px] lg:left-1 right-[5px] '>
+                              {searchFilter.map((item, m) => (
+                                  <div key={m} className=''>
+                                      <div className='flex items-center hover:bg-[#F5F5F3] rounded-t-md lg:py-6 py-2'>
+                                          <div className='ml-4'>
+                                              <img className='h-[150px] w-[250px]' src={item.thumbnail} alt="image" />
+                                          </div>
+                                          <div className='lg:ml-4 ml-2'>
+                                              <h2 className='font-dm font-bold lg:text-[16px] text-[10px] text-[#262626]'>{item.title}</h2>
+                                              <p className='font-dm font-bold lg:text-[16px] text-[10px] text-[#262626] mt-2'>${item.price}</p>
+                                          </div>
+                                      </div>
+                                  </div>
+                              ))
+                              }
+                          </div>
+                      }
+                    </div>
 
                     <div className="lg:w[39%] w-[25%] relative flex justify-end lg:gap-6 gap-2">
                         <div className='flex cursor-pointer' ref={userRef}>

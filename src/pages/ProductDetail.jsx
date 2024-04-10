@@ -30,7 +30,8 @@ const ProductDetail = () => {
             setData(response.data);
         })
     }
-
+    
+    
    useEffect(()=>{
       document.addEventListener('click',(e)=>{
          if(plusRef?.current?.contains(e.target) === true){
@@ -62,8 +63,8 @@ return (
     <section className='py-[40px] lg:py-[120px] mx-2 lg:mx-0'>
        <Container>
           <div className='flex gap-x-2 lg:gap-x-6 flex-wrap '>
-            {data?.images?.map((item,na)=>(
-              <div key={na} className='w-[48%] lg:w-[32%] h-[200px] lg:h-[600px] py-2 lg:py-6'>
+            {data?.images?.map((item,a)=>(
+              <div key={a} className='w-[48%] lg:w-[32%] h-[200px] lg:h-[600px] py-2 lg:py-6'>
                 <img src={item} alt="" className='w-full h-full' />
              </div>
             ))}
@@ -76,10 +77,13 @@ return (
               </span>
                <h3 className='font-dm font-normal text-[14px] line-height:[18px] text-[#767676]'>1 Review</h3>
             </div>
+           
             <div className='flex gap-8  pb-[24px]'>
-            <h4 className='line-through font-dm font-normal text-[16px] lg:text-[20px] line-height:[18px] text-[#767676]'>$88.00</h4>
-             <h5 className='font-dm font-bold text-[16px] lg:text-[20px] line-height:[26px] text-[#262626]'>$00</h5>
-            </div> <hr />
+            <h4 className='line-through font-dm font-normal text-[16px] lg:text-[20px] line-height:[18px] text-[#767676]'>${data.price}</h4>
+             <h5 className='font-dm font-bold text-[16px] lg:text-[20px] line-height:[26px] text-[#262626]'>$ {data.price - (data.price * data.discountPercentage / 100)}</h5>
+             {/* discount price ber korte hbe */}
+            </div> 
+            <hr />
             <div className='flex gap-4 items-center pt-[10px] lg:pt-[20px] pb-[10px] lg:pb-[20px]'>
                <h2 className='font-dm font-bold text-[14px] lg:text-[16px] line-height:[23px] text-[#262626]'>COLOR:</h2>
                <div className='h-[15px] w-[15px] rounded-full bg-[rgba(0,0,0,0.27)] cursor-pointer'></div>
@@ -156,7 +160,7 @@ return (
             </div>
          </div>
          <div className='pb-[15px]'>
-         <p className='font-dm font-normal text-[14px] lg:text-[16px] line-height:[30px] text-[#767676]'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+         <p className='font-dm font-normal text-[14px] lg:text-[16px] line-height:[30px] text-[#767676]'> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
          </div> <hr />
          <div className='pt-[53px] w-[90%] lg:[w-40%] lg:w-[40%]'>
             <h2 className='font-dm font-bold text-[18px] lg:text-[20px] line-height:[30px] text-[#262626] pb-[25px] lg:pb-[48px]'>Add a Review</h2>
