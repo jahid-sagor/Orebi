@@ -3,12 +3,11 @@ import { FaHeart, FaShoppingCart } from "react-icons/fa"
 import { FiRefreshCw } from "react-icons/fi"
 import { Link } from 'react-router-dom';
 
-const Pegi = ({ pegi, catFilter }) => {
+const Pegi = ({ pegi, catFilter,brandFilter }) => {
 
   return (
     <>
       {catFilter.length > 0 ?
-
         catFilter.map((item, index) => (
           <div className='w-[48%] lg:w-[32%]' key={index}>
             <Link to={`/product/${item.id}`}>

@@ -11,6 +11,7 @@ import Shop from "./pages/Shop";
 import Cart from "./pages/Cart";
 import Signup from "./pages/Signup";
 import Cheakout from "./pages/Cheakout";
+import SearchFilter from "./pages/SearchFilter";
 
 
 
@@ -26,6 +27,7 @@ const router = createBrowserRouter(createRoutesFromElements(
      <Route path="/signup" element={<Signup/>}></Route>
      <Route path="/cheakout" element={<Cheakout/>}></Route>
      <Route path="/myaccount" element={<Myaccount/>}></Route>
+     <Route path="/search" element={<SearchFilter/>}></Route>
      <Route path="*" element={<Error/>}></Route>
   </Route>
 ))

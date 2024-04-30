@@ -137,6 +137,9 @@ return (
             </div>
          </div>
          
+
+
+
          <div className='flex gap-8 pt-[50px] lg:pt-[123px]'>
             <h2 className='font-dm font-bold text-[16px] lg:text-[20px] line-height:[30px] hover:text-[#262626] text-[#767676]'>Description</h2>
             <h3 className='font-dm font-bold text-[16px] lg:text-[20px] line-height:[30px] text-[#767676] hover:text-[#262626]'>Reviews (1)</h3>
@@ -162,6 +165,10 @@ return (
          <div className='pb-[15px]'>
          <p className='font-dm font-normal text-[14px] lg:text-[16px] line-height:[30px] text-[#767676]'> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
          </div> <hr />
+
+
+
+
          <div className='pt-[53px] w-[90%] lg:[w-40%] lg:w-[40%]'>
             <h2 className='font-dm font-bold text-[18px] lg:text-[20px] line-height:[30px] text-[#262626] pb-[25px] lg:pb-[48px]'>Add a Review</h2>
              <form action="">

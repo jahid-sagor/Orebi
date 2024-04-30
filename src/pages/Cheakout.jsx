@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import Container from '../components/Container'
 import { Link } from 'react-router-dom'
 import { getDatabase, ref, onValue } from "firebase/database";
-
 import { useSelector } from 'react-redux';
+import StripeCheckout from 'react-stripe-checkout';
+
 
 
 const Cheakout = () => {
@@ -11,7 +12,6 @@ const Cheakout = () => {
    const db = getDatabase();
    let [dataChea, setDataCheak] = useState([])
   
-
    useEffect(() => {
       const starCountRef = ref(db, 'users/');
       onValue(starCountRef, (snapshot) => {
@@ -21,14 +21,25 @@ const Cheakout = () => {
       });
    }, [])
 
-   const {totalPrice, totalQuantity} = data.reduce((acc , item)=>{
+   const {totalPrice, totalQuantity, title} = data.reduce((acc , item)=>{
       acc.totalPrice += item.price * item.quantity 
       acc.totalQuantity += item.quantity
+      acc.title += item.title
       return acc;
-     },{totalPrice:0, totalQuantity:0})
+     },{totalPrice:0, totalQuantity:0, title:"" })
     
-     console.log(totalPrice);
-     console.log(totalQuantity);
+
+     const onToken = (token) => {
+      fetch('/save-stripe-token', {
+        method: 'POST',
+        body: JSON.stringify(token),
+      }).then(response => {
+        response.json().then(data => {
+          alert(`We are in business, ${data.email}`);
+        });
+      });
+    };
+
   return (
     <section>
         <Container>
@@ -42,34 +53,23 @@ const Cheakout = () => {
              <form action="">
              <div className='w-[70%] flex justify-between'>
                     <div className='w-[45%]'>
-                        <label htmlFor="" className='font-dm font-bold text-[16px] text-[#262626]'> First Name*</label> <br /> 
-                        <input className='font-dm font-normal text-[14px] placeholder:text-[#767676] py-2 px-2 w-full ' type="text" placeholder='First Name'/> <hr />
+                        <label htmlFor="" className='font-dm font-bold text-[16px] text-[#262626]'> First Name*</label> <br />
+                        <input className='font-dm font-normal text-[14px] placeholder:text-[#767676] py-2 px-2 w-full ' type="text" placeholder='First Name'/>  <hr />
                     </div> 
                     <div className='w-[45%]'>
                         <label  className='font-dm font-bold text-[16px] text-[#262626]' htmlFor="">Last Name*</label> <br />
                         <input className='font-dm font-normal text-[14px] placeholder:text-[#767676] py-2 px-2 w-full ' type="email" placeholder='Last Name'/> <hr />
                     </div>   
                     </div>
-                    <div className='py-6'>
-                       <label className='font-dm font-bold text-[16px] text-[#262626]' htmlFor="">Companye Name (optional)</label>
-                       <input className='font-dm font-normal text-[14px] placeholder:text-[#767676] py-2 px-2 w-full ' type="text"  placeholder='Company Name'/> <hr />
-                    </div>
-                    <div className='py-6'>
-                       <label className='font-dm font-bold text-[16px] text-[#262626]' htmlFor="">Country *</label>
-                       <input className='font-dm font-normal text-[14px] placeholder:text-[#767676] py-2 px-2 w-full ' type="text"  placeholder='Please select'/> <hr />
-                    </div>
+                   
+                   
                     <div className='py-6'>
                        <label className='font-dm font-bold text-[16px] text-[#262626]' htmlFor="">Street Address *</label>
-                       <input className='font-dm font-normal text-[14px] placeholder:text-[#767676] py-2 px-2 w-full ' type="text"  placeholder='Please select'/> <hr />
-                       <input className='font-dm font-normal text-[14px] placeholder:text-[#767676] py-2 px-2 w-full ' type="text"  placeholder='Please select'/> <hr />
+                       <input className='font-dm font-normal text-[14px] placeholder:text-[#767676]  py-2 px-2 w-full ' type="text"  placeholder='Please select'/> <hr />
                     </div>
                     <div className='py-6'>
                        <label className='font-dm font-bold text-[16px] text-[#262626]' htmlFor="">Town/City *</label>
                        <input className='font-dm font-normal text-[14px] placeholder:text-[#767676] py-2 px-2 w-full ' type="text"  placeholder='Town/City'/> <hr />
-                    </div>
-                    <div className='py-6'>
-                       <label className='font-dm font-bold text-[16px] text-[#262626]' htmlFor="">County (optional)</label>
-                       <input className='font-dm font-normal text-[14px] placeholder:text-[#767676] py-2 px-2 w-full ' type="text"  placeholder='County'/> <hr />
                     </div>
                     <div className='py-6'>
                        <label className='font-dm font-bold text-[16px] text-[#262626]' htmlFor="">Post Code *</label>
@@ -103,8 +103,8 @@ const Cheakout = () => {
             </thead>
             <tbody>
               <tr>
-                <td className="font-dm font-bold text-[16px] text-[#262626] text-start px-4 py-4 border border-slate-200">Product name x 1</td>
-                <td className="font-dm font-normal text-[16px] text-[#767676] px-4 border border-slate-200 ">$</td>
+                <td className="font-dm font-bold text-[16px] text-[#262626] text-start px-4 py-4 border border-slate-200">Product name  x  {data.length}  </td>
+                <td className="font-dm font-normal text-[16px] text-[#767676] px-4 border border-slate-200 ">{title}</td>
               </tr>
               <tr>
                 <td className="font-dm font-bold text-[16px] text-[#262626] text-start px-4 py-4 border border-slate-200 ">Total Quantity</td>
@@ -121,6 +121,17 @@ const Cheakout = () => {
             </tbody>
         </table>               
          </div>
+         <div className='pb-10'>
+        <StripeCheckout 
+          token={onToken}
+          stripeKey="pk_test_51P9rEEBKzlpv23bGwUQgPDBfKPBtixymufLC65Embw3vMge6ACRftJg6HSAgGDTG6Qdd8PYUN0d4sZDO3FqPtd9L00FCWdpi96" 
+          amount={totalPrice * 100}
+          />
+         </div>
+        
+
+
+
         </Container>
     </section>
   )
